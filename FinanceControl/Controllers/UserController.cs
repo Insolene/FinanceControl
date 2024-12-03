@@ -18,31 +18,31 @@ namespace FinanceControl.Controllers
         public async Task<ActionResult<List<UserEntities>>> GetAllUsers()
         {
             List<UserEntities> users = await _userRepository.GetAll();
-            return users;
+            return Ok(users);
         }
         [HttpGet, Route("Nome")]
         public async Task<ActionResult<UserEntities>> GetByName(string name)
         {
            UserEntities users = await _userRepository.GetByName(name);
-            return users;
+            return Ok(users);
         }
         [HttpGet, Route("Id")]
         public async Task<ActionResult<UserEntities>> GetById(int id)
         {
            UserEntities users = await _userRepository.GetById(id);
-            return users;
+            return Ok(users);
         }
         [HttpPost,Route("Add")]
         public async Task<ActionResult<UserEntities>> Add([FromBody] UserEntities user)
         {
             UserEntities userAdd = await _userRepository.AddUser(user);
-            return userAdd;
+            return Ok(userAdd);
         }
         [HttpPut,Route("Update")]
         public async Task<ActionResult<UserEntities>> Update([FromBody] UserEntities user, int id)
         {
             UserEntities userUp = await _userRepository.UpdateUser(user, id);
-            return userUp;
+            return Ok(userUp);
         }
         [HttpDelete]
         public async Task<ActionResult<UserEntities>> Delete(int id)
