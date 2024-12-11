@@ -34,7 +34,7 @@ namespace FinanceControl.Controllers
             TransactionEntities tr = await _banco.AddTransaction(transaction);
             return Ok(tr);
         }
-        [HttpPost,Route("update")]
+        [HttpPut,Route("update")]
         public async Task<ActionResult<TransactionEntities>> Update([FromBody] TransactionEntities transaction, int id)
         {
             TransactionEntities tr = await _banco.UpdateTransaction(transaction,id);

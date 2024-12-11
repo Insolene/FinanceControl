@@ -4,6 +4,7 @@ using FinanceControl.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceControl.Migrations
 {
     [DbContext(typeof(Banco))]
-    partial class BancoModelSnapshot : ModelSnapshot
+    [Migration("20241206123715_AddtableTranEcate")]
+    partial class AddtableTranEcate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,6 +50,9 @@ namespace FinanceControl.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryEntitiesId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -61,17 +67,12 @@ namespace FinanceControl.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Value")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("CategoryEntitiesId");
 
                     b.ToTable("Transactions");
                 });
@@ -92,28 +93,42 @@ namespace FinanceControl.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TransactionEntitiesId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TransactionEntitiesId");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FinanceControl.Entities.TransactionEntities", b =>
                 {
-                    b.HasOne("FinanceControl.Entities.CategoryEntities", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("FinanceControl.Entities.CategoryEntities", "CategoryEntities")
+                        .WithMany("Transaction")
+                        .HasForeignKey("CategoryEntitiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FinanceControl.Entities.UserEntities", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("CategoryEntities");
+                });
 
-                    b.Navigation("Category");
+            modelBuilder.Entity("FinanceControl.Entities.UserEntities", b =>
+                {
+                    b.HasOne("FinanceControl.Entities.TransactionEntities", null)
+                        .WithMany("UserEntities")
+                        .HasForeignKey("TransactionEntitiesId");
+                });
 
-                    b.Navigation("User");
+            modelBuilder.Entity("FinanceControl.Entities.CategoryEntities", b =>
+                {
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("FinanceControl.Entities.TransactionEntities", b =>
+                {
+                    b.Navigation("UserEntities");
                 });
 #pragma warning restore 612, 618
         }

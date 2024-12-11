@@ -44,7 +44,7 @@ namespace FinanceControl.Controllers
             UserEntities userUp = await _userRepository.UpdateUser(user, id);
             return Ok(userUp);
         }
-        [HttpDelete]
+        [HttpDelete,Route("delete")]
         public async Task<ActionResult<UserEntities>> Delete(int id)
         {
             bool deleted = await _userRepository.DeleteUser(id);
